@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import tech.buildrun.customerconnect.controller.dto.CreateCustomerDto;
+import tech.buildrun.customerconnect.controller.dto.UpdateCustomerDto;
 import tech.buildrun.customerconnect.entity.CustomerEntity;
 import tech.buildrun.customerconnect.repository.CustomerRepository;
 
@@ -73,5 +74,30 @@ public class CustomerService {
 
     public Optional<CustomerEntity> findById(Long customerId) {
         return customerRepository.findById(customerId);
+    }
+
+    public Optional<CustomerEntity> updateById(Long customerId, UpdateCustomerDto dto) {
+        var customer = customerRepository.findById(customerId);
+
+        if (customer.isPresent()){
+            updateFields(dto, customer);
+
+            customerRepository.save(customer.get());
+        }
+        return customer;
+    }
+
+    private void updateFields(UpdateCustomerDto dto, Optional<CustomerEntity> customer) {
+        if (hasText(dto.fullName())){
+            customer.get().setFullName(dto.fullName());
+        }
+
+        if (hasText(dto.email())){
+            customer.get().setEmail(dto.email());
+        }
+
+        if (hasText(dto.phoneNumber())){
+            customer.get().setPhoneNumber(dto.phoneNumber());
+        }
     }
 }

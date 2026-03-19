@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.buildrun.customerconnect.controller.dto.ApiResponse;
 import tech.buildrun.customerconnect.controller.dto.CreateCustomerDto;
 import tech.buildrun.customerconnect.controller.dto.PaginationResponse;
+import tech.buildrun.customerconnect.controller.dto.UpdateCustomerDto;
 import tech.buildrun.customerconnect.entity.CustomerEntity;
 import tech.buildrun.customerconnect.service.CustomerService;
 
@@ -46,9 +47,18 @@ public class CustomerController {
 
     @GetMapping(path = "/{customerId}")
     public ResponseEntity<CustomerEntity> findById(@PathVariable("customerId") Long customerId){
-        var user = customerService.findById(customerId);
-        return user.isPresent()
-                ? ResponseEntity.ok(user.get())
+        var customer = customerService.findById(customerId);
+        return customer.isPresent()
+                ? ResponseEntity.ok(customer.get())
+                : ResponseEntity.notFound().build();
+    }
+
+    @PutMapping(path = "/{customerId}")
+    public ResponseEntity<CustomerEntity> updateById(@PathVariable("customerId") Long customerId,
+                                                     @RequestBody UpdateCustomerDto dto){
+        var customer = customerService.updateById(customerId, dto);
+        return customer.isPresent()
+                ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
 }
