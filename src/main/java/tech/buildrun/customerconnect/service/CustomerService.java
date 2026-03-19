@@ -7,6 +7,11 @@ import org.springframework.stereotype.Service;
 import tech.buildrun.customerconnect.controller.dto.CreateCustomerDto;
 import tech.buildrun.customerconnect.entity.CustomerEntity;
 import tech.buildrun.customerconnect.repository.CustomerRepository;
+
+import javax.swing.text.html.Option;
+
+import java.util.Optional;
+
 import static org.springframework.util.StringUtils.hasText;
 
 @Service
@@ -66,4 +71,7 @@ public class CustomerService {
         return PageRequest.of(page, pageSize, direction, "createdAt");
     }
 
+    public Optional<CustomerEntity> findById(Long customerId) {
+        return customerRepository.findById(customerId);
+    }
 }
